@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>NewPost</title>
+
+	<style>
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+			font-size: 50px;
+		}
+
+		#title,
+		#tags,
+		#author {
+			width: 1590px;
+			height: 40px;
+			font-size: 30px;
+			margin-left: 100px;
+		}
+
+		#content {
+			margin-left: 100px;
+		}
+
+		#publish {
+			font-size: 20px;
+			margin-left: 48%;
+			width: 100px;
+			height: 50px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>New Post</h1>
+	<form action="/savePost" method="post">
+		<div>
+			<input type="text" placeholder="Title" id="title" name="title" required><br><br><br>
+			<input type="text" placeholder="Tags" id="tags" name="tags" required><br><br><br>
+			<input type="text" placeholder="Author" id="author" name="author" required><br><br><br>
+			<textarea id="content" name="content" rows="30" cols="196" required></textarea><br><br>
+			<input type="submit" value="Publish" id="publish" name="publish">
+		</div>
+	</form>
+</body>
+
+</html>

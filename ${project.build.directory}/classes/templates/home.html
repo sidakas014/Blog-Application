@@ -1,0 +1,143 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Home</title>
+	<style>
+		body {
+			padding: 35px 150px 0px 55px;
+		}
+
+		span>h1 {
+			float: left;
+			width: fit-content;
+		}
+
+		a {
+			margin: 20px;
+			text-decoration: none;
+			font-size: 20px;
+		}
+
+		#filter {
+			height: 30px;
+			width: 120px;
+		}
+
+		#sortBy {
+			float: right;
+			margin-top: -29px;
+			height: 30px;
+			width: 120px;
+		}
+
+		#opearationContainer {
+			position: absolute;
+			top: 1%;
+			right: 2%;
+		}
+
+		#post {
+			margin: 10px 0px 50px 10%;
+			border: 2px solid black;
+			display: inline-block;
+			width: 620px;
+			height: 240px;
+		}
+
+		.inbox {
+			color: black;
+		}
+
+		#createpost {
+			position: absolute;
+			left: 5%;
+			top: 12%;
+		}
+
+		#resetBtn {
+			position: absolute;
+			right: -2%;
+			margin-top: -20%;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<span>
+			<h1>My Blog Application</h1>
+		</span>
+		<div id="opearationContainer">
+			<a style="float: right;" href="/login">login</a>
+			<br>
+			<form action="/">
+				<input type="search" name="search" placeholder="Search" required style="width:250px;">
+				<input type="hidden">
+			</form>
+			<br>
+			<form action="/">
+				<select name="filter" multiple="multiple">
+					<option value="" selected>Choose Filter</option>
+					<optgroup label="Author">
+						<option th:each="author : ${postAuthor}" th:value="${author}" th:text="${author}"></option>
+					</optgroup>
+					<optgroup label="published DateTime">
+						<option th:each="publishedAt : ${postPublishedAt}" th:value="${publishedAt}"
+							th:text="${publishedAt}"></option>
+					</optgroup>
+					<optgroup label="tags">
+						<option th:each="tag : ${uniqueTags}" th:value="${tag}" th:text="${tag}"></option>
+					</optgroup>
+				</select>
+				<input type="submit" value="Filter">
+			</form>
+			<a th:href="@{'/'}"><button id="resetBtn">Reset</button></a>
+			<form th:action="@{'/'}">
+				
+				
+				<input type="hidden" name="sortField" value="publishedAt" selected></input></select>
+				<select name="search" id="sortBy" onchange="this.form.submit()">
+					<optgroup label="published DateTime">
+						<option>SortBy</option>
+						<option value="ascending" name="title">Older to Newer</option>
+						<option value="descending" name="title">Newer to Older</option>
+					</optgroup>
+				</select>
+			</form>
+		</div>
+		<form action="/newpost" method="get">
+			<input type="submit" value="new Post" id="createpost" name="createpost">
+		</form>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br>
+		<div id="post" th:each="post : ${posts}">
+			<a th:href="@{/post{id}(id=${post.id})}">
+				<h1 class="inbox" th:text="${post.title}" style="padding-left: 2%;"></h1>
+				<span class="inbox" th:text="${post.author}" style="padding-left: 2%;"></span>,
+				<span class="inbox" th:text="${post.publishedAt}" style="padding-left: 2%;"></span><br>
+				<span class="inbox" th:each="tag : ${post.tags}" th:text="${tag.name}" style="padding-left: 2%;"></span>
+				<br><br>
+				<div class="inbox" th:text="${post.excerpt}" style="padding-left: 2%;"></div>
+			</a>
+		</div>
+		<br>
+		<footer style="padding-bottom: 2%">
+        <div th:if="${search == ''}">
+            <a th:href="@{'/?start='+${currentPage-1}+'&limit=6'}"><button
+                    th:if="${currentPage > 0}">&lt;&lt;previous</button></a> <a
+                th:href="@{'/?start='+${currentPage+1}+'&limit=6'}"><button
+                    th:if="${currentPage < totalPages-1}" style="float: right;">next>></button></a>
+        </div>
+        <div th:if="${search != ''}">
+
+            <a
+                th:href="@{'/?sortField=publishedAt'+'&search='+${search}+'&start='+${currentPage-1}+'&limit=6'}"><button
+                    th:if="${currentPage > 0}">&lt;&lt;previous</button></a> <a
+                th:href="@{'/?sortField=publishedAt'+'&search='+${search}+'&start='+${currentPage+1}+'&limit=6'}"><button
+                    th:if="${currentPage < totalPages-1}" style="float: right;">next>></button></a>
+        </div>
+    </footer>
+</body>
+
+</html>

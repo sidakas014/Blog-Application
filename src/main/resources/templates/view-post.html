@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Post</title>
+
+	<style>
+		h2 {
+			padding-left: 20px;
+			padding-top: 10px;
+			font-size: 30px;
+		}
+
+		.login {
+			float: right;
+			margin-top: -10px;
+			margin-right: 5%;
+		}
+
+		#delete {
+			margin-right: 5%;
+			float: right;
+		}
+
+		#update {
+			margin-right: 1%;
+			float: right;
+		}
+
+		#title {
+			text-align: center;
+		}
+
+		p {
+			margin-left: 5%;
+			margin-right: 5%;
+			margin-top: 5%;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>My Blog Application</h2>
+	<div class="login" sec:authorize="isAnonymous()">
+		<form th:action="@{/login}">
+			<button type="submit">Login</button>
+		</form>
+	</div>
+	<div class="login" sec:authorize="isAuthenticated()">
+		<form th:action="@{/logout}" method="post">
+			<button type="submit">Logout</button>
+		</form>
+	</div>
+	<br><br>
+	<form sec:authorize="isAuthenticated()" th:action="@{/deletePost/{id}(id=${post.id})}" th:method="get" >
+		<button  th:if="${post.author.equals(#authentication.principal.username) or #authorization.expression('hasAuthority(''ADMIN'')')}" type="submit" id="delete">Delete</button>
+	</form>
+	<form sec:authorize="isAuthenticated()" th:action="@{/updatePost/{id}(id=${post.id})}" th:method="get" >
+		<button  th:if="${post.author.equals(#authentication.principal.username) or #authorization.expression('hasAuthority(''ADMIN'')')}" type="submit" id="update">Update</button>
+
+	</form>
+	<div id="title">
+		<h1 th:text="${post.title}"></h1>
+		<span th:text="${post.author}"></span>
+		<span>, </span>
+		<span th:text="${post.updatedAt}"></span>
+	</div>
+	<div style="text-align: center;"><span id="tag" th:each="tag : ${post.tags}" th:value="${tag.name}" th:text="'  '+ ${tag.name} + ','"></span>
+	</div>
+	<p th:text="${post.content}"></p>
+	<div id="commentBox">
+		<hr>
+		<form style="padding-left:5%;" th:action="@{/saveComment/{id}(id=${post.id})}" method="post">
+			<h4>Add Your Comment</h4>
+			<input type="text" placeholder="Your Name" name="name" required><br>
+			<input type="email" placeholder="Your Email" name="email" required><br>
+			<textarea placeholder="Type Your Comment" name="comment" required></textarea><br>
+			<input type="submit">
+		</form>
+		<h4 style="padding-left: 5%;">---All Comments---</h4>
+		<div style="padding-left:5%;" th:each="comment: ${commentList}">
+			<b>Name: </b><span th:text="${comment.name}"></span><br>
+			<b>Email: </b><span th:text="${comment.email}"></span><br>
+			<b>CreatedAt:</b><span th:text="${comment.createdAt}"></span><br>
+			<b>UpdatedAt:</b><span th:text="${comment.updatedAt}"></span><br>
+			<form sec:authorize="isAuthenticated()" th:action="@{/deleteComment/{id}/{postId}(id=${comment.id}, postId=${post.id})}" method="get" th:if="${post.author == #authentication.principal.username}">
+				<input type="submit" value="Delete">
+			</form>
+			<br>
+			<b>Comment:</b><span th:text="${comment.comment}"></span><br>
+			<form sec:authorize="isAuthenticated()" th:action="@{/updateComment/{id}/{postId}(id=${comment.id}, postId=${post.id})}" method="post" th:if="${post.author == #authentication.principal.username}">
+				<textarea type="text" placeholder="Update Your Comment" name="updatedComment"></textarea>
+				<input type="submit" value="Update">
+			</form>
+			<br>
+			<br>
+		</div>
+	</div>
+</body>
+
+</html>

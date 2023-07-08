@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register</title>
+	<style>
+		form {
+			margin-right: 70%;
+			position: absolute;
+			left: 40%;
+			top: 15%;
+			padding-left: 50px;
+		}
+
+		h1 {
+			text-align: center;
+			margin-left: 3.5%;
+		}
+
+		#box {
+			font-size: 20px;
+			margin-top: 0%;
+			padding-left: 30px;
+		}
+
+		#login {
+			font-size: 16px;
+			align-content: center;
+			margin-left: 10%;
+		}
+
+		#anchor {
+			text-decoration: none;
+		}
+
+		#create {
+			align-content: center;
+			margin-left: 25%;
+			width: 50%;
+			font-size: 16px;
+		}
+	</style>
+</head>
+
+<body>
+	<form action="saveUser" method="post">
+		<h1>Create account</h1>
+		<br>
+		<div id="box">
+			<div>
+				<input type="text" placeholder="Name" id="name" name="name" required>
+			</div>
+			<br>
+			<div>
+				<input type="email" placeholder="Email" id="email" name="email" required>
+			</div>
+			<br>
+			<div>
+				<input type="password" placeholder="Password" id="password" name="password" required>
+			</div>
+			<br>
+			<div>
+				<input type="password" placeholder="Confirm Password" id="confirmPassword" name="confirmPassword"
+					required>
+			</div>
+			<br>
+			<input type="submit" value="Submit" id="create">
+			<br><br>
+			<div id="login">
+				<span>Have account?<a id="anchor" href="/login">Login</a></span>
+			</div>
+		</div>
+	</form>
+
+</body>
+
+</html>
